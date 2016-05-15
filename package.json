@@ -1,0 +1,17 @@
+{
+  "name": "round-robin-stream",
+  "version": "1.0.0",
+  "description": "Forking stream that rotates destination",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/**/*_test.js"
+  },
+  "keywords": [],
+  "author": "Brandon Farmer <bthesorceror@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "tape": "^4.5.1"
+  },
+  "dependencies": {
+  }
+}
