@@ -7,6 +7,7 @@
     "test": "tape test/**/*_test.js"
   },
   "keywords": [],
+  "repository": "https://github.com/bthesorceror/round-robin-stream",
   "author": "Brandon Farmer <bthesorceror@gmail.com>",
   "license": "ISC",
   "devDependencies": {
