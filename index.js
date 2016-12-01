@@ -15,10 +15,15 @@ class RoundRobinStream extends Writable {
 
   _write(chunk, enc, next){
     let stream = this.streams.next();
+    let nextStream = this.streams.peek();
 
     stream.write(chunk);
 
-    next();
+    if (nextStream._writableState.needDrain) {
+      nextStream.once('drain', next);
+    } else {
+      next();
+    }
   }
 
   createReadStream() {

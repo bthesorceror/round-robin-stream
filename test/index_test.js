@@ -1,5 +1,7 @@
 'use strict';
 
+const Readable         = require('stream').Readable;
+const Writable         = require('stream').Writable;
 const test             = require('tape');
 const RoundRobinStream = require('../');
 
@@ -91,4 +93,38 @@ test('handles removals correctly in all cases', (t) => {
 
   rrstream.write('hello again');
   rrstream.write('goodbye again');
+});
+
+test('stops the producer if the next consumer can\'t keep up', (t) => {
+  t.plan(1);
+
+  let rrstream = new RoundRobinStream({ objectMode: true, highWaterMark: 1 });
+  let stream1  = rrstream.createReadStream();
+  let stream2  = rrstream.createReadStream();
+
+  let counterValue = 100;
+  let counterReadableStream = new Readable({
+    read: function (size) {
+      if (counterValue-- > 0) {
+        this.push({ counter: counterValue });
+      } else {
+        this.push(null);
+      }
+    },
+    objectMode: true
+  });
+
+  let printWritableStream = new Writable({
+    write(chunk, encoding, callback) {
+      // It's not consuming data
+    },
+    objectMode: true
+  });
+
+  stream1.pipe(printWritableStream);
+  stream2.pipe(printWritableStream);
+
+  counterReadableStream.pipe(rrstream);
+
+  setTimeout(() => t.ok(counterValue > 0), 50);
 });

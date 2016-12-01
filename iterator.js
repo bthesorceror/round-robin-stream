@@ -24,18 +24,20 @@ module.exports = class Iterator {
   }
 
   next() {
-    this._incrementCurrent();
+    this.current = this._calculateNextCurrent();
 
     return this.items[this.current];
   }
 
+  peek() {
+    return this.items[this._calculateNextCurrent()];
+  }
 
-  _incrementCurrent() {
+  _calculateNextCurrent() {
     if (this.items.length === 0) {
-      this.current = -1;
-      return;
+      return -1;
     }
 
-    this.current = (this.current + 1) % this.items.length;
+    return (this.current + 1) % this.items.length;
   }
 }
